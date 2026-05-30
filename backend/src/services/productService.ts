@@ -42,6 +42,47 @@ class ProductService {
         })
     }
 
+    async findByCode(
+        codigo: number
+    ): Promise<Product | null> {
+
+        const db = await connectDatabase()
+
+        return new Promise((resolve, reject) => {
+
+            db.query(
+                `
+            SELECT *
+            FROM PRODUTO
+            WHERE CODIGO = ?
+            `,
+                [codigo],
+
+                (
+                    err: Error | null,
+                    result: Product[]
+                ) => {
+
+                    db.detach()
+
+                    if (err) {
+
+                        reject(
+                            new HttpError(
+                                500,
+                                err.message
+                            )
+                        )
+
+                        return
+                    }
+
+                    resolve(result[0] || null)
+                }
+            )
+        })
+    }
+
     async create(
         descricao: string,
         codigo_grupo: number,

@@ -15,7 +15,16 @@ class GroupService {
         return new Promise((resolve, reject) => {
 
             db.query(
-                "SELECT * FROM GRUPO",
+                `SELECT
+                    G.CODIGO,
+                    G.DESCRICAO,
+                    COUNT(P.CODIGO) AS QUANTIDADE_PRODUTOS
+                FROM GRUPO G
+                LEFT JOIN PRODUTO P
+                    ON P.CODIGO_GRUPO = G.CODIGO
+                GROUP BY
+                    G.CODIGO,
+                    G.DESCRICAO`,
                 [],
 
                 (
@@ -41,6 +50,49 @@ class GroupService {
                 }
             )
         })
+    }
+
+    async findByCode(
+        CODIGO: number
+    ): Promise<Group | null> {
+
+        const db = await connectDatabase();
+
+        return new Promise((resolve, reject) => {
+
+            db.query(
+                `
+            SELECT *
+            FROM GRUPO
+            WHERE CODIGO = ?
+            `,
+                [CODIGO],
+
+                (
+                    err: Error | null,
+                    result: Group[]
+                ) => {
+
+                    db.detach();
+
+                    if (err) {
+
+                        reject(
+                            new HttpError(
+                                500,
+                                err.message
+                            )
+                        );
+
+                        return;
+                    }
+
+                    resolve(
+                        result[0] || null
+                    );
+                }
+            );
+        });
     }
 
     async create(

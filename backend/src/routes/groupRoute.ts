@@ -13,6 +13,11 @@ groupRouter.get(
     groupController.listGroups.bind(groupController)
 )
 
+groupRouter.get(
+    "/grupos/:codigo",
+    groupController.findGroupByCode.bind(groupController)
+);
+
 groupRouter.post(
     "/grupos",
     groupController.createGroup.bind(groupController)

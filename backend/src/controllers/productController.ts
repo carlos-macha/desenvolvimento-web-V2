@@ -2,14 +2,14 @@ import {
     Request,
     Response,
     NextFunction
-} from "express"
+} from "express";
 
-import ProductService from "../services/productService"
+import ProductService from "../services/productService";
 
 import {
     ProductBody,
     ProductParams
-} from "../types/productType"
+} from "../types/productType";
 
 class ProductController {
 
@@ -26,18 +26,40 @@ class ProductController {
         try {
 
             const products =
-                await this.productService.findAll()
+                await this.productService.findAll();
 
-            return res.json(products)
+            return res.json(products);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
+
+    public findProductByCode = async (
+        req: Request<ProductParams>,
+        res: Response,
+        next: NextFunction
+    ) => {
+
+        try {
+
+            const CODIGO =
+                Number(req.params.codigo);
+
+            const product =
+                await this.productService.findByCode(CODIGO);
+
+            return res.json(product);
+
+        } catch (error) {
+
+            next(error);
+        }
+    };
 
     public createProducts = async (
-        req: Request<{}, {}, ProductBody>,
+        req: Request<{}, {}, any>,
         res: Response,
         next: NextFunction
     ) => {
@@ -45,58 +67,58 @@ class ProductController {
         try {
 
             const {
-                descricao,
-                codigo_grupo,
-                valor
-            } = req.body
+                DESCRICAO,
+                CODIGO_GRUPO,
+                VALOR
+            } = req.body;
 
             const product =
                 await this.productService.create(
-                    descricao,
-                    codigo_grupo,
-                    valor
-                )
+                    DESCRICAO,
+                    CODIGO_GRUPO,
+                    VALOR
+                );
 
-            return res.status(201).json(product)
+            return res.status(201).json(product);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 
     public editProducts = async (
-        req: Request<ProductParams, {}, ProductBody>,
+        req: Request<ProductParams, {}, any>,
         res: Response,
         next: NextFunction
     ) => {
 
         try {
 
-            const codigo =
-                Number(req.params.codigo)
+            const CODIGO =
+                Number(req.params.codigo);
 
             const {
-                descricao,
-                codigo_grupo,
-                valor
-            } = req.body
+                DESCRICAO,
+                CODIGO_GRUPO,
+                VALOR
+            } = req.body;
 
             const product =
                 await this.productService.update(
-                    codigo,
-                    descricao,
-                    codigo_grupo,
-                    valor
-                )
+                    CODIGO,
+                    DESCRICAO,
+                    CODIGO_GRUPO,
+                    VALOR
+                );
 
-            return res.json(product)
+            return res.json(product);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 
     public excludesProducts = async (
         req: Request<ProductParams>,
@@ -106,19 +128,19 @@ class ProductController {
 
         try {
 
-            const codigo =
-                Number(req.params.codigo)
+            const CODIGO =
+                Number(req.params.codigo);
 
             const result =
-                await this.productService.delete(codigo)
+                await this.productService.delete(CODIGO);
 
-            return res.json(result)
+            return res.json(result);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 }
 
-export default ProductController
+export default ProductController;

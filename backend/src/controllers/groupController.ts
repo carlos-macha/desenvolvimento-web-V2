@@ -2,14 +2,14 @@ import {
     Request,
     Response,
     NextFunction
-} from "express"
+} from "express";
 
-import GroupService from "../services/groupService"
+import GroupService from "../services/groupService";
 
 import {
     GroupBody,
     GroupParams
-} from "../types/groupType"
+} from "../types/groupType";
 
 class GroupController {
 
@@ -26,15 +26,15 @@ class GroupController {
         try {
 
             const groups =
-                await this.groupService.findAll()
+                await this.groupService.findAll();
 
-            return res.json(groups)
+            return res.json(groups);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 
     public createGroup = async (
         req: Request<{}, {}, GroupBody>,
@@ -45,21 +45,47 @@ class GroupController {
         try {
 
             const {
-                descricao
-            } = req.body
+                DESCRICAO
+            } = req.body;
 
             const group =
                 await this.groupService.create(
-                    descricao
-                )
+                    DESCRICAO
+                );
 
-            return res.status(201).json(group)
+            return res
+                .status(201)
+                .json(group);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
+
+    public findGroupByCode = async (
+        req: Request<GroupParams>,
+        res: Response,
+        next: NextFunction
+    ) => {
+
+        try {
+
+            const CODIGO =
+                Number(req.params.codigo);
+
+            const group =
+                await this.groupService.findByCode(
+                    CODIGO
+                );
+
+            return res.json(group);
+
+        } catch (error) {
+
+            next(error);
+        }
+    };
 
     public editGroup = async (
         req: Request<GroupParams, {}, GroupBody>,
@@ -69,26 +95,26 @@ class GroupController {
 
         try {
 
-            const codigo =
-                Number(req.params.codigo)
+            const CODIGO =
+                Number(req.params.codigo);
 
             const {
-                descricao
-            } = req.body
+                DESCRICAO
+            } = req.body;
 
             const group =
                 await this.groupService.update(
-                    codigo,
-                    descricao
-                )
+                    CODIGO,
+                    DESCRICAO
+                );
 
-            return res.json(group)
+            return res.json(group);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 
     public deleteGroup = async (
         req: Request<GroupParams>,
@@ -98,21 +124,21 @@ class GroupController {
 
         try {
 
-            const codigo =
-                Number(req.params.codigo)
+            const CODIGO =
+                Number(req.params.codigo);
 
             const result =
                 await this.groupService.delete(
-                    codigo
-                )
+                    CODIGO
+                );
 
-            return res.json(result)
+            return res.json(result);
 
         } catch (error) {
 
-            next(error)
+            next(error);
         }
-    }
+    };
 }
 
-export default GroupController
+export default GroupController;

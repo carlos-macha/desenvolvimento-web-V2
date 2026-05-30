@@ -9,6 +9,9 @@ export const productSchema = z.object({
     codigo_grupo: z
         .number(),
 
-    valor: z
-        .number()
+    valor:
+        z.number()
+        .positive(
+            "O valor deve ser maior que zero"
+        ),
 })

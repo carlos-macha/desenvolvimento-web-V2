@@ -1,24 +1,24 @@
 export interface Product {
 
-    codigo: number
+    CODIGO: number;
 
-    descricao: string
+    DESCRICAO: string;
 
-    codigo_grupo: number
+    CODIGO_GRUPO: number;
 
-    valor: number
+    VALOR: number;
 }
 
 export interface ProductBody {
 
-    descricao: string
+    DESCRICAO: string;
 
-    codigo_grupo: number
+    CODIGO_GRUPO: number;
 
-    valor: number
+    VALOR: number;
 }
 
 export interface ProductParams {
 
-    codigo: string
+    codigo: string;
 }

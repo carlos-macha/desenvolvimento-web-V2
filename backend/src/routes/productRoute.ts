@@ -9,6 +9,11 @@ productRouter.get(
     productController.listProducts.bind(productController)
 )
 
+productRouter.get(
+    "/produtos/:codigo",
+    productController.findProductByCode.bind(productController)
+)
+
 productRouter.post(
     "/produtos",
     productController.createProducts.bind(productController)

@@ -1,16 +1,16 @@
 export interface Group {
 
-    codigo: number
+    CODIGO: number;
 
-    descricao: string
+    DESCRICAO: string;
 }
 
 export interface GroupBody {
 
-    descricao: string
+    DESCRICAO: string;
 }
 
 export interface GroupParams {
 
-    codigo: string
+    codigo: string;
 }
