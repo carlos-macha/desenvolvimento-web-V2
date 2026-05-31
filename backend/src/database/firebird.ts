@@ -1,10 +1,5 @@
 const Firebird = require("node-firebird")
 
-console.log(process.env.DB_HOST)
-console.log(process.env.DB_DATABASE)
-console.log(process.env.DB_USER)
-console.log(process.env.DB_PASSWORD)
-
 const options = {
 
     host:

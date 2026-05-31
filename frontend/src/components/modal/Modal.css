@@ -119,6 +119,20 @@
     margin-top: 10px;
 }
 
+.modal-info {
+    padding: 10px 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    color: #374151;
+}
+
 .save-button,
 .delete-button {
     border: none;

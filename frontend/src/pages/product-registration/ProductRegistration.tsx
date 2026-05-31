@@ -85,6 +85,20 @@ export default function ProductRegistration() {
     async function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        if (
+            !DESCRICAO.trim() ||
+            !CODIGO_GRUPO.trim() ||
+            !VALOR.trim()
+        ) {
+            showToast(
+                "Todos os campos devem ser preenchidos",
+                "error"
+            );
+
+            return;
+        }
+
+
         if (Number(VALOR) <= 0) {
             showToast("O valor deve ser maior que zero", "error");
             return;
@@ -188,7 +202,7 @@ export default function ProductRegistration() {
                 <form onSubmit={handleSearch}>
 
                     <Input
-                        label="Pesquisar produto"
+                        label="Pesquisar produto por código"
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}

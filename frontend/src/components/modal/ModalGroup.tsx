@@ -53,6 +53,15 @@ export default function ModalGroup({
 
                 <div className="modal-body">
 
+                    <div className="modal-info">
+                        <strong>Código:</strong> {group.CODIGO}
+                    </div>
+
+                    <div className="modal-info">
+                        <strong>Quantidade de Produtos:</strong>{" "}
+                        {group.QUANTIDADE_PRODUTOS ?? 0}
+                    </div>
+
                     <Input
                         label="Descrição"
                         type="text"

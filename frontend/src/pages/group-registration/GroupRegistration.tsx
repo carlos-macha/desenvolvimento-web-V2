@@ -84,6 +84,15 @@ export default function GroupRegistration() {
     ) {
         e.preventDefault();
 
+        if (!DESCRICAO.trim()) {
+            showToast(
+                "Todos os campos devem ser preenchidos",
+                "error"
+            );
+
+            return;
+        }
+
         try {
             await createGroup({ DESCRICAO });
 
@@ -170,7 +179,7 @@ export default function GroupRegistration() {
                 <form onSubmit={handleSearch}>
 
                     <Input
-                        label="Pesquisar grupo"
+                        label="Pesquisar grupo por código"
                         value={search}
                         onChange={(e) =>
                             setSearch(e.target.value)
