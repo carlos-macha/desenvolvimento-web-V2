@@ -153,6 +153,7 @@ http://localhost:5173
 ## Observações
 
 * Não é permitido excluir grupos que possuam produtos vinculados.
+* Ao rodar o projeto pela primeira vez é necessário criar um grupo para que seja possível criar um produto.
 * As mensagens de sucesso e erro são exibidas através de notificações na interface.
 * O projeto foi desenvolvido utilizando TypeScript tanto no front-end quanto no back-end.
 
