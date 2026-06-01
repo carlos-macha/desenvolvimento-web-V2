@@ -50,7 +50,11 @@ Aplicação desenvolvida para o teste técnico contendo:
 
 ## Configuração do banco de dados
 
-No diretório `backend`, criar um arquivo `.env` com as seguintes variáveis:
+O projeto utiliza Firebird 5.
+
+Configuração
+
+Criar um banco de dados Firebird e configurar o arquivo .env do backend:
 
 ```env
 PORT=3000
