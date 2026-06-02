@@ -27,6 +27,24 @@ export async function createProduct(
     return response.json();
 }
 
+export async function getProductsByGroupRange(
+    grupoInicial: number,
+    grupoFinal: number
+): Promise<Product[]> {
+
+    const response = await fetch(
+        `${API_URL}/group-range?grupoInicial=${grupoInicial}&grupoFinal=${grupoFinal}`
+    )
+
+    console.log("status:", response.status);
+
+    const data = await response.json();
+
+    console.log("data:", data);
+
+    return data;
+}
+
 export async function getProducts():
     Promise<Product[]> {
 

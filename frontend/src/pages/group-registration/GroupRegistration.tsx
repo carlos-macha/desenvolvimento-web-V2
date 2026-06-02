@@ -72,6 +72,7 @@ export default function GroupRegistration() {
 
             setSelectedGroup(group);
             setIsModalOpen(true);
+            setSearch("")
 
         } catch (error) {
             console.error(error);

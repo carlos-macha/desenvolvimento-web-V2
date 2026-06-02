@@ -3,17 +3,22 @@ import "./ProductRegistration.css"
 import Input from "../../components/input/Input";
 import Modal from "../../components/modal/ModalProduct";
 import Toast from "../../components/toast/Toast";
+import ModalGroupSelector from "../../components/modal/ModalGroupSelector";
+import ModalFilteredProducts from "../../components/modal/ModalFilteredProducts";
 import { useNavigate } from "react-router-dom";
 
 import {
     createProduct,
+    getProductsByGroupRange,
     deleteProduct,
     getProductByCode,
     getProducts,
     updateProduct,
 } from "../../service/ProductService";
+import { getGroup } from "../../service/GroupService";
 
 import type { Product } from "../../models/Product";
+import type { Group } from "../../models/Group";
 
 export default function ProductRegistration() {
 
@@ -22,9 +27,29 @@ export default function ProductRegistration() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [search, setSearch] = useState("");
+    const [grupoInicial, setGrupoInicial] =
+        useState("");
+
+    const [grupoFinal, setGrupoFinal] =
+        useState("");
+
+    const [groupFieldTarget, setGroupFieldTarget] =
+        useState<"cadastro" | "inicial" | "final" | null>(null);
     const [VALOR, setVALOR] = useState("");
     const [DESCRICAO, setDESCRICAO] = useState("");
     const [CODIGO_GRUPO, setCODIGO_GRUPO] = useState("");
+
+    const [groups, setGroups] =
+        useState<Group[]>([]);
+
+    const [isGroupModalOpen, setIsGroupModalOpen] =
+        useState(false);
+
+    const [filteredProducts, setFilteredProducts] =
+        useState<Product[]>([]);
+
+    const [isFilteredModalOpen, setIsFilteredModalOpen] =
+        useState(false);
 
     const navigate = useNavigate();
 
@@ -75,11 +100,163 @@ export default function ProductRegistration() {
 
             setSelectedProduct(product);
             setIsModalOpen(true);
+            setSearch("")
 
         } catch (error) {
             console.error(error);
             showToast("Erro ao pesquisar produto", "error");
         }
+    }
+
+    async function handleSearchByGroup() {
+
+        let inicial = Number(grupoInicial);
+        let final = Number(grupoFinal);
+
+        if (!inicial && !final) {
+            showToast(
+                "Informe pelo menos um grupo",
+                "error"
+            );
+            return;
+        }
+
+        if (!grupoInicial.trim()) {
+            inicial = Number(grupoFinal);
+        }
+
+        if (!grupoFinal.trim()) {
+            final = Number(grupoInicial);
+        }
+
+        if (inicial > final) {
+            [inicial, final] = [final, inicial];
+        }
+
+        try {
+
+            const data =
+                await getProductsByGroupRange(
+                    inicial,
+                    final
+                );
+
+            console.log("Produtos recebidos:", data);
+
+            setFilteredProducts(data);
+
+            setIsFilteredModalOpen(true);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Erro ao pesquisar produtos",
+                "error"
+            );
+        }
+    }
+
+    async function handleSelectFilteredProduct(
+        product: Product
+    ) {
+
+        try {
+
+            const completeProduct =
+                await getProductByCode(
+                    Number(product.CODIGO)
+                );
+
+            if (!completeProduct) {
+
+                showToast(
+                    "Produto não encontrado",
+                    "error"
+                );
+
+                return;
+            }
+
+            setSelectedProduct(
+                completeProduct
+            );
+
+            setIsFilteredModalOpen(false);
+
+            setIsModalOpen(true);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Erro ao abrir produto",
+                "error"
+            );
+        }
+    }
+
+    async function handleOpenGroupModal(
+        target: "cadastro" | "inicial" | "final"
+    ) {
+
+        try {
+
+            const data =
+                await getGroup();
+
+            setGroups(data);
+
+            setGroupFieldTarget(target);
+
+            setIsGroupModalOpen(true);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Erro ao carregar grupos",
+                "error"
+            );
+        }
+    }
+
+    function handleSelectGroup(
+        group: Group
+    ) {
+
+        if (
+            groupFieldTarget ===
+            "cadastro"
+        ) {
+
+            setCODIGO_GRUPO(
+                String(group.CODIGO)
+            );
+
+        } else if (
+            groupFieldTarget ===
+            "inicial"
+        ) {
+
+            setGrupoInicial(
+                String(group.CODIGO)
+            );
+
+        } else if (
+            groupFieldTarget ===
+            "final"
+        ) {
+
+            setGrupoFinal(
+                String(group.CODIGO)
+            );
+        }
+
+        setIsGroupModalOpen(false);
     }
 
     async function handleSave(e: React.FormEvent<HTMLFormElement>) {
@@ -114,7 +291,6 @@ export default function ProductRegistration() {
             showToast("Produto salvo com sucesso", "success");
 
             setDESCRICAO("");
-            setCODIGO_GRUPO("");
             setVALOR("");
 
             await loadProducts();
@@ -216,6 +392,73 @@ export default function ProductRegistration() {
 
             </div>
 
+            <div className="group-range-search">
+
+                <h2>
+                    Pesquisa por Grupo
+                </h2>
+
+                <div className="group-field">
+
+                    <Input
+                        label="Grupo Inicial"
+                        type="text"
+                        value={grupoInicial}
+                        onChange={(e) =>
+                            setGrupoInicial(
+                                e.target.value
+                            )
+                        }
+                    />
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            handleOpenGroupModal(
+                                "inicial"
+                            )
+                        }
+                    >
+                        Buscar
+                    </button>
+
+                </div>
+
+                <div className="group-field">
+
+                    <Input
+                        label="Grupo Final"
+                        type="text"
+                        value={grupoFinal}
+                        onChange={(e) =>
+                            setGrupoFinal(
+                                e.target.value
+                            )
+                        }
+                    />
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            handleOpenGroupModal(
+                                "final"
+                            )
+                        }
+                    >
+                        Buscar
+                    </button>
+
+                </div>
+
+                <button
+                    type="button"
+                    onClick={handleSearchByGroup}
+                >
+                    Filtrar Produtos
+                </button>
+
+            </div>
+
             <div className="create-product">
 
                 <h2>Novo produto</h2>
@@ -229,12 +472,31 @@ export default function ProductRegistration() {
                         onChange={(e) => setDESCRICAO(e.target.value)}
                     />
 
-                    <Input
-                        label="Grupo"
-                        type="text"
-                        value={CODIGO_GRUPO}
-                        onChange={(e) => setCODIGO_GRUPO(e.target.value)}
-                    />
+                    <div className="group-field">
+
+                        <Input
+                            label="Grupo"
+                            type="text"
+                            value={CODIGO_GRUPO}
+                            onChange={(e) =>
+                                setCODIGO_GRUPO(
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                handleOpenGroupModal(
+                                    "cadastro"
+                                )
+                            }
+                        >
+                            Pesquisar Grupo
+                        </button>
+
+                    </div>
 
                     <Input
                         label="Valor"
@@ -294,16 +556,38 @@ export default function ProductRegistration() {
 
             </div>
 
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                product={selectedProduct}
-                onChange={(updatedProduct) =>
-                    setSelectedProduct(updatedProduct)
-                }
-                onUpdate={handleUpdate}
-                onDelete={handleDelete}
-            />
+            <>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    product={selectedProduct}
+                    onChange={(updatedProduct) =>
+                        setSelectedProduct(updatedProduct)
+                    }
+                    onUpdate={handleUpdate}
+                    onDelete={handleDelete}
+                />
+
+                <ModalGroupSelector
+                    isOpen={isGroupModalOpen}
+                    groups={groups}
+                    onClose={() =>
+                        setIsGroupModalOpen(false)
+                    }
+                    onSelect={handleSelectGroup}
+                />
+
+                <ModalFilteredProducts
+                    isOpen={isFilteredModalOpen}
+                    products={filteredProducts}
+                    onClose={() =>
+                        setIsFilteredModalOpen(false)
+                    }
+                    onSelect={
+                        handleSelectFilteredProduct
+                    }
+                />
+            </>
 
         </div>
     );

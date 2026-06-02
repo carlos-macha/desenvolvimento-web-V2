@@ -36,6 +36,34 @@ class ProductController {
         }
     };
 
+    public findProductsByGroupRange = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+
+        try {
+
+            const grupoInicial =
+                Number(req.query.grupoInicial)
+
+            const grupoFinal =
+                Number(req.query.grupoFinal)
+
+            const products =
+                await this.productService.findByGroupRange(
+                    grupoInicial,
+                    grupoFinal
+                )
+
+            return res.json(products)
+
+        } catch (error) {
+
+            next(error)
+        }
+    }
+
     public findProductByCode = async (
         req: Request<ProductParams>,
         res: Response,

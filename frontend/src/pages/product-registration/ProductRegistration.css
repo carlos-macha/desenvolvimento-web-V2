@@ -8,7 +8,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     margin-bottom: 24px;
 }
 
@@ -24,6 +23,7 @@
 }
 
 .unique-search-code,
+.group-range-search,
 .create-product,
 .product-table-container {
     background: #fff;
@@ -39,6 +39,23 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.group-range-search {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.group-range-search h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+}
+
+.group-range-search > button {
+    align-self: flex-start;
 }
 
 button {
@@ -121,4 +138,19 @@ button:active {
 
 .product-table tbody tr:hover {
     background: #f8fafc;
+}
+
+.group-field {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.group-field > div {
+    flex: 1;
+}
+
+.group-field button {
+    height: 44px;
+    white-space: nowrap;
 }

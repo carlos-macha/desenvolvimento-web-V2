@@ -170,3 +170,83 @@
 .delete-button:hover {
     background: #b91c1c;
 }
+
+.modal-selector {
+    width: 700px;
+    max-width: 90%;
+}
+
+.group-search-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 10px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.group-selector-table-container {
+    max-height: 400px;
+
+    overflow-y: auto;
+}
+
+.group-selector-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.group-selector-table th,
+.group-selector-table td {
+    padding: 12px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.group-selector-table th {
+    position: sticky;
+
+    top: 0;
+
+    background: white;
+
+    z-index: 1;
+}
+
+.selectable-row {
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+
+.selectable-row:hover {
+    background: #f3f4f6;
+}
+
+.modal-products {
+    width: 900px;
+
+    max-width: 95vw;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+}
+
+.selectable-row {
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.selectable-row:hover {
+    background: #f3f4f6;
+}

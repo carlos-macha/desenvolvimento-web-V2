@@ -10,6 +10,11 @@ productRouter.get(
 )
 
 productRouter.get(
+    "/produtos/group-range",
+    productController.findProductsByGroupRange.bind(productController)
+)
+
+productRouter.get(
     "/produtos/:codigo",
     productController.findProductByCode.bind(productController)
 )

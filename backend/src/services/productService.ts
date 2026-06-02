@@ -42,6 +42,55 @@ class ProductService {
         })
     }
 
+    async findByGroupRange(
+        grupoInicial: number,
+        grupoFinal: number
+    ): Promise<Product[]> {
+
+        const db = await connectDatabase()
+
+        return new Promise((resolve, reject) => {
+
+            db.query(
+                `
+            SELECT *
+            FROM PRODUTO
+            WHERE CODIGO_GRUPO
+                BETWEEN ? AND ?
+            ORDER BY
+                CODIGO_GRUPO,
+                DESCRICAO
+            `,
+                [
+                    grupoInicial,
+                    grupoFinal
+                ],
+
+                (
+                    err: Error | null,
+                    result: Product[]
+                ) => {
+
+                    db.detach()
+
+                    if (err) {
+
+                        reject(
+                            new HttpError(
+                                500,
+                                err.message
+                            )
+                        )
+
+                        return
+                    }
+
+                    resolve(result)
+                }
+            )
+        })
+    }
+
     async findByCode(
         codigo: number
     ): Promise<Product | null> {
